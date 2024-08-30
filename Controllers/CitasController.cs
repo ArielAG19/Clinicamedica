@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clinicamedica.Data;
 using Clinicamedica.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Clinicamedica.Controllers
 {
+    [Authorize]
     public class CitasController : Controller
     {
         private readonly ClinicamedicaContext _context;

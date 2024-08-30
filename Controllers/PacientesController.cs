@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization; //  [Authorize]
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clinicamedica.Data;
 using Clinicamedica.Models;
-using System.Diagnostics; // Necesario para la depuración
+using System.Diagnostics; 
 
 namespace Clinicamedica.Controllers
 {
+    [Authorize] 
     public class PacientesController : Controller
     {
         private readonly ClinicamedicaContext _context;
@@ -51,15 +53,10 @@ namespace Clinicamedica.Controllers
         }
 
         // POST: Pacientes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PacienteId,Nombre,Apellido,FechaNacimiento,Direccion,Telefono")] Paciente paciente)
         {
-            // Agregar un punto de interrupción para depuración
-            
-
             if (ModelState.IsValid)
             {
                 _context.Add(paciente);
@@ -86,8 +83,6 @@ namespace Clinicamedica.Controllers
         }
 
         // POST: Pacientes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PacienteId,Nombre,Apellido,FechaNacimiento,Direccion,Telefono")] Paciente paciente)
