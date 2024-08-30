@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Clinicamedica.Data;
 using Clinicamedica.Models;
+using System.Diagnostics; // Necesario para la depuración
 
 namespace Clinicamedica.Controllers
 {
@@ -56,6 +57,9 @@ namespace Clinicamedica.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PacienteId,Nombre,Apellido,FechaNacimiento,Direccion,Telefono")] Paciente paciente)
         {
+            // Agregar un punto de interrupción para depuración
+            
+
             if (ModelState.IsValid)
             {
                 _context.Add(paciente);

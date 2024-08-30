@@ -11,7 +11,7 @@ namespace Clinicamedica.Models
         public DateTime FechaPago { get; set; }
 
         // Relación con Paciente y Tratamiento
-        public Paciente Paciente { get; set; }
-        public Tratamiento Tratamiento { get; set; }
+        public Paciente? Paciente { get; set; }
+        public Tratamiento? Tratamiento { get; set; }
     }
 }

@@ -49,26 +49,35 @@ namespace Clinicamedica.Controllers
         // GET: Citas/Create
         public IActionResult Create()
         {
-            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "MedicoId");
-            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "PacienteId");
+            // Asegúrate de que estos datos estén correctamente poblados
+            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "Nombre");
+            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "Nombre");
             return View();
         }
 
         // POST: Citas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CitaId,PacienteId,MedicoId,Fecha,Motivo")] Cita cita)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cita);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(cita);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException)
+                {
+                    // Maneja excepciones si es necesario
+                    ModelState.AddModelError("", "No se pudo guardar la cita. Inténtalo de nuevo.");
+                }
             }
-            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "MedicoId", cita.MedicoId);
-            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "PacienteId", cita.PacienteId);
+
+            // Si el modelo no es válido, vuelve a cargar los datos de la vista
+            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "Nombre", cita.MedicoId);
+            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "Nombre", cita.PacienteId);
             return View(cita);
         }
 
@@ -85,14 +94,12 @@ namespace Clinicamedica.Controllers
             {
                 return NotFound();
             }
-            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "MedicoId", cita.MedicoId);
-            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "PacienteId", cita.PacienteId);
+            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "Nombre", cita.MedicoId);
+            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "Nombre", cita.PacienteId);
             return View(cita);
         }
 
         // POST: Citas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CitaId,PacienteId,MedicoId,Fecha,Motivo")] Cita cita)
@@ -117,13 +124,15 @@ namespace Clinicamedica.Controllers
                     }
                     else
                     {
+                        // Puedes registrar el error si es necesario
+                        // _logger.LogError("Error en la actualización de la cita.");
                         throw;
                     }
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "MedicoId", cita.MedicoId);
-            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "PacienteId", cita.PacienteId);
+            ViewData["MedicoId"] = new SelectList(_context.Set<Medico>(), "MedicoId", "Nombre", cita.MedicoId);
+            ViewData["PacienteId"] = new SelectList(_context.Paciente, "PacienteId", "Nombre", cita.PacienteId);
             return View(cita);
         }
 
@@ -156,9 +165,9 @@ namespace Clinicamedica.Controllers
             if (cita != null)
             {
                 _context.Cita.Remove(cita);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

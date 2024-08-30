@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Clinicamedica.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Clinicamedica.Data
 {
-    public class ClinicamedicaContext : DbContext
+    public class ClinicamedicaContext : IdentityDbContext<IdentityUser>
     {
         public ClinicamedicaContext(DbContextOptions<ClinicamedicaContext> options)
             : base(options)
